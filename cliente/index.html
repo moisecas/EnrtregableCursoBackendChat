@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>Chat on</title>
+    <style>
+        form{background: rgba(0, 0, 0, .15); padding: 0.25rem; position: fixed; bottom: 0; left: 0;right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px);}
+        ul{list-style-type: 0.5rem 1rem;}
+        ul>li:nth-child(odd){
+            background: blue;
+            text-align: right;
+            font-style: italic;
+            font-weight: 650; 
+        } 
+    </style>
+  </head>
+  <body> 
+      <!-- cuerpo del chat clases de bootstrap --> 
+    <h1 style="text-align: center;">App chat para cursada en CoderHouse Abril 2022</h1> 
+    <ul class="list-group">
+        
+    </ul>
+    <form action="">
+        <input type="text" class="form-control" placeholder="ingrese mensaje">
+        <button type="submit" class="btn btn-primary"> Enviar </button>
+    </form>
+   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- traemos a socket.io, integrar -->
+    <script src="/socket.io/socket.io.js"></script> 
+
+    <script>  
+        let socket  = io(); //empezamos trayendo io, lo tenemos gracias a (ver linea 36)
+        //referenciamos los elementos del dom
+        const form = document.querySelector('form')
+        const input = document.querySelector('input') 
+        let mensajes = document.querySelector('ul')
+
+        form.addEventListener('submit', (e)=>{ //referenciamos a form
+            e.preventDefault()
+            if(input.value){ //referenciar a los mensajes del input
+                socket.emit('chat', input.value) // 
+                input.value = '' 
+            }
+        })
+
+        socket.on('chat', (msg)=>{ //con chat capturamos los mensajes 
+            let item = document.createElement('li') //mostramos los mensajes de forma dinamica
+            item.textContent = msg
+            mensajes.appendChild(item) 
+            window.scrollTo(0, document.body.scrollHeight) 
+        })
+
+    </script>
+    
+  </body>
+</html>
